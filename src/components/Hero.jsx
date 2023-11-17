@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import otgg from "../assets/otgg.png";
 
 const Hero = () => {
@@ -38,9 +38,9 @@ const Hero = () => {
         <span
           className="purple_text"
           style={{ cursor: "pointer" }}
-          onClick={() =>
-            window.open("https://webdevill.netlify.app", "_blank")
-          }
+          // onClick={() =>
+          //   window.open("https://webdevill.netlify.app", "_blank")
+          // }
         >
           {" "}
           <a>hospitality</a>
@@ -57,21 +57,25 @@ const LiveReviewsFeed = () => {
   // Dummy data for reviews
   const reviewsData = [
     {
+      id: "tripadvisor",
       platform: "TripAdvisor",
       rating: 4.5,
       text: "Great experience! Loved the hotel and the service.",
     },
     {
+      id: "google",
       platform: "Google My Business",
       rating: 4.2,
       text: "Beautiful hotel with excellent amenities.",
     },
     {
+      id: "booking",
       platform: "Booking.com",
       rating: 4.0,
       text: "Comfortable stay and friendly staff.",
     },
     {
+      id: "trustpilot",
       platform: "Trustpilot",
       rating: 4.8,
       text: "Outstanding service! Highly recommended.",
@@ -79,11 +83,33 @@ const LiveReviewsFeed = () => {
     // Add more dummy data as needed
   ];
 
+  const [responseText, setResponseText] = useState({
+    tripadvisor: "Click the 'More-ly' button to generate an automatic response.",
+    google: "Click the 'More-ly' button to generate an automatic response.",
+    booking: "Click the 'More-ly' button to generate an automatic response.",
+    trustpilot: "Click the 'More-ly' button to generate an automatic response.",
+  });
+
   // Dummy function for generating responses with OpenAI
-  const generateResponse = () => {
+  const generateResponse = (id) => {
     // Implement OpenAI integration here
     // Placeholder for demonstration purposes
-    return "Thank you for your kind words! We're glad you enjoyed your stay.";
+    return (
+      <div className="rounded-md border p-4">
+        {responseText[id]}
+        <button
+          className="bg-purple-500 text-white p-2 mt-4 w-full rounded"
+          onClick={() =>
+            setResponseText((prevResponse) => ({
+              ...prevResponse,
+              [id]: "",
+            }))
+          }
+        >
+          more-ly
+        </button>
+      </div>
+    );
   };
 
   return (
@@ -93,15 +119,15 @@ const LiveReviewsFeed = () => {
       </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {reviewsData.map((review, index) => (
-          <div key={index} className="bg-white p-4 rounded shadow mb-4">
+        {reviewsData.map((review) => (
+          <div key={review.id} className="bg-white p-4 rounded shadow mb-4">
             <p className="font-semibold mb-1">{review.platform}</p>
             <p className="text-sm mb-1">Rating: {review.rating}</p>
             <p className="text mb-2">{review.text}</p>
-            <p className="text-gray-600">
+            <div className="text-gray-600">
               {/* Placeholder for AI-generated response */}
-              {generateResponse()}
-            </p>
+              {generateResponse(review.id)}
+            </div>
           </div>
         ))}
       </div>
